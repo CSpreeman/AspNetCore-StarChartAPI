@@ -64,5 +64,59 @@ namespace StarChart.Controllers
             _context.SaveChanges();
             return CreatedAtRoute("GetById", new { id = celestialObject.Id }, celestialObject);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, CelestialObject data)
+        {
+            CelestialObject celestialObject = _context.CelestialObjects.Find(id);
+
+            if (celestialObject != null)
+            {
+                celestialObject.Name = data.Name;
+                celestialObject.OrbitalPeriod = data.OrbitalPeriod;
+                celestialObject.OrbitedObjectId = data.OrbitedObjectId;
+                _context.Update(celestialObject);
+                _context.SaveChanges();
+                return NoContent();
+            }
+            return NotFound();
+        }
+
+        [HttpPatch("{id}/{name}")]
+        public IActionResult RenameObject(int id, string name)
+        {
+            CelestialObject celestialObject = _context.CelestialObjects.Find(id);
+
+            if (celestialObject != null)
+            {
+                celestialObject.Name = name;
+                _context.Update(celestialObject);
+                _context.SaveChanges();
+                return NoContent();
+            }
+            return NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult RenameObject(int id)
+        {
+            List<CelestialObject> celestialObjects = _context.Set<CelestialObject>().ToList();
+
+            if (celestialObjects?.Count() > 0)
+            {
+                List<CelestialObject> celestialObjectsToDelete = new List<CelestialObject>();
+
+                foreach (var item in celestialObjects)
+                {
+                    if (item.Id == id || item.OrbitedObjectId == id)
+                    {
+                        celestialObjectsToDelete.Add(item);
+                    }
+                }
+                _context.RemoveRange(celestialObjectsToDelete);
+                _context.SaveChanges();
+            }
+            return NotFound();
+        }
     }
 }
