@@ -100,7 +100,7 @@ namespace StarChart.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            List<CelestialObject> celestialObjects = _context.Set<CelestialObject>().ToList();
+            List<CelestialObject> celestialObjects = _context.CelestialObjects.Where(x => x.Id == id).ToList();
 
             if (celestialObjects?.Count() > 0)
             {
