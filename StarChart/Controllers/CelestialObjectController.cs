@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using StarChart.Data;
 using StarChart.Models;
@@ -28,6 +29,29 @@ namespace StarChart.Controllers
                 return Ok(celestialObject);
             }
             return NotFound();
+        }
+
+        [HttpGet("{name}")]
+        public IActionResult GetByName(string name)
+        {
+            CelestialObject celestialObject = _context.CelestialObjects.Find(name);
+            if (celestialObject != null)
+            {
+                celestialObject.Satellites = _context.CelestialObjects.Where(x => x.OrbitedObjectId == celestialObject.Id).ToList();
+                return Ok(celestialObject);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<CelestialObject> celestialObjects = _context.Set<CelestialObject>().ToList();
+            foreach (var item in celestialObjects)
+            {
+                item.Satellites = _context.CelestialObjects.Where(x => x.OrbitedObjectId == item.Id).ToList();
+            }
+            return Ok(celestialObjects);
         }
     }
 }
