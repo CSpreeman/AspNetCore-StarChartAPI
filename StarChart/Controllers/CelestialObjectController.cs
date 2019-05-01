@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarChart.Data;
+using StarChart.Models;
 
 namespace StarChart.Controllers
 {
@@ -15,5 +16,16 @@ namespace StarChart.Controllers
             _context = context;
         }
 
+        [HttpGet("{id:int}")]
+        [ActionName("GetById")]
+        public IActionResult GetById(int id)
+        {
+            CelestialObject celestialObject = _context.CelestialObjects.Find(id);
+            if (celestialObject != null)
+            {
+                return Ok(celestialObject);
+            }
+            return NotFound();
+        }
     }
 }
