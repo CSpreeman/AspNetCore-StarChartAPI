@@ -98,7 +98,7 @@ namespace StarChart.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult RenameObject(int id)
+        public IActionResult Delete(int id)
         {
             List<CelestialObject> celestialObjects = _context.Set<CelestialObject>().ToList();
 
